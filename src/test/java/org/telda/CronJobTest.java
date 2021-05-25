@@ -19,7 +19,7 @@ public class CronJobTest {
     public void testCronJobInitialisation() {
         assertEquals(0, cronJob.getFailedRuns());
         assertEquals(0, cronJob.getSuccessfulRuns());
-        assertEquals(Instant.now().plus(cronJob.schedulingFrequency).truncatedTo(ChronoUnit.MINUTES),
+        assertEquals(Instant.now().plus(cronJob.getSchedulingFrequency()).truncatedTo(ChronoUnit.MINUTES),
                 cronJob.nextExecutionTime.truncatedTo(ChronoUnit.MINUTES));
     }
 
@@ -27,7 +27,7 @@ public class CronJobTest {
     public void testSetNextExecutionTime() {
         Instant instant = Instant.now();
         cronJob.setNextExecutionTime(instant);
-        assertEquals(instant.plus(cronJob.schedulingFrequency),
+        assertEquals(instant.plus(cronJob.getSchedulingFrequency()),
                 cronJob.nextExecutionTime);
     }
 

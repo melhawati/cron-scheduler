@@ -14,9 +14,9 @@ import static java.lang.String.format;
 public class CronScheduler {
     private static final Logger logger = LoggerFactory.getLogger(CronScheduler.class);
 
-    final PriorityBlockingQueue<CronJob> priorityQueue;
-    final Set<UUID> registeredJobs;
-    final Thread cronJobConsumerThread;
+    private final PriorityBlockingQueue<CronJob> priorityQueue;
+    private final Set<UUID> registeredJobs;
+    private final Thread cronJobConsumerThread;
 
     public CronScheduler(int noOfExecutorThreads) {
         this.priorityQueue = new PriorityBlockingQueue<>();
@@ -51,5 +51,17 @@ public class CronScheduler {
                     uId.toString()));
             cronJobConsumerThread.interrupt();
         }
+    }
+
+    PriorityBlockingQueue<CronJob> getPriorityQueue() {
+        return priorityQueue;
+    }
+
+    Set<UUID> getRegisteredJobs() {
+        return registeredJobs;
+    }
+
+    Thread getCronJobConsumerThread() {
+        return cronJobConsumerThread;
     }
 }

@@ -33,7 +33,7 @@ class CronJobConsumer implements Runnable {
                     priorityBlockingQueue.put(job);
                     goToSleep(job);
                 } else {
-                    logger.info(format("Executing cron job at %s with unique ID %s", Instant.now(), job.uuid.toString()));
+                    logger.info(format("Executing cron job at %s with unique ID %s", Instant.now(), job.getUuid().toString()));
                     executeReadyJob(job);
                 }
             } catch (InterruptedException exception) {
@@ -50,15 +50,15 @@ class CronJobConsumer implements Runnable {
      * @param job the cron job which is ready for execution
      */
     void executeReadyJob(CronJob job) {
-        CompletableFuture.runAsync(job.cronFunction, executorService)
-                .orTimeout(job.expectedRunTime.toSeconds(), TimeUnit.SECONDS)
+        CompletableFuture.runAsync(job.getCronFunction(), executorService)
+                .orTimeout(job.getExpectedRunTime().toSeconds(), TimeUnit.SECONDS)
                 .whenComplete((res, ex) -> {
                     if (ex != null) {
                         logger.error(format("Run %d for cron job with ID [%s] killed with exception: [%s]",
-                                job.incrementFailedRuns(), job.uuid.toString(), ex));
+                                job.incrementFailedRuns(), job.getUuid().toString(), ex));
                     } else {
                         logger.info(format("Run [%d] for cron job with ID [%s] was successful in [%d] milliseconds",
-                                job.incrementSuccessfulRuns(), job.uuid.toString(), job.cronFunction.getLastExecutionTime()));
+                                job.incrementSuccessfulRuns(), job.getUuid().toString(), job.getCronFunction().getLastExecutionTime()));
                     }
                 });
         job.setNextExecutionTime(Instant.now());

@@ -11,8 +11,8 @@ import java.util.stream.IntStream;
  */
 final class RecordedCronJob implements Runnable {
     private final int maxSuccessfulRuns;
-    int numRunTimesCounter = 0;
-    final List<Instant> runTimes = new ArrayList<>();
+    private int numRunTimesCounter = 0;
+    private final List<Instant> runTimes = new ArrayList<>();
 
     RecordedCronJob(int maxSuccessfulRuns) {
         this.maxSuccessfulRuns = maxSuccessfulRuns;
@@ -34,5 +34,17 @@ final class RecordedCronJob implements Runnable {
             timeIntervals.add(interval);
         });
         return timeIntervals;
+    }
+
+    public int getMaxSuccessfulRuns() {
+        return maxSuccessfulRuns;
+    }
+
+    public int getNumRunTimesCounter() {
+        return numRunTimesCounter;
+    }
+
+    public List<Instant> getRunTimes() {
+        return runTimes;
     }
 }

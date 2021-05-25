@@ -18,22 +18,22 @@ public class CronSchedulerTest {
     public void testRegisterCronJobSuccess(){
         UUID uuid = UUID.randomUUID();
         cronScheduler.registerCronJob(Duration.ofSeconds(1), Duration.ofSeconds(10), () -> System.out.println("cron"), uuid);
-        assertTrue(cronScheduler.registeredJobs.contains(uuid));
-        assertEquals(1, cronScheduler.priorityQueue.size());
+        assertTrue(cronScheduler.getRegisteredJobs().contains(uuid));
+        assertEquals(1, cronScheduler.getPriorityQueue().size());
     }
 
     @Test
     public void testRegisterCronJobFails(){
         UUID uuid = UUID.randomUUID();
         cronScheduler.registerCronJob(Duration.ofSeconds(1), Duration.ofSeconds(10), () -> System.out.println("cron"), uuid);
-        assertTrue(cronScheduler.registeredJobs.contains(uuid));
-        assertEquals(1, cronScheduler.priorityQueue.size());
+        assertTrue(cronScheduler.getRegisteredJobs().contains(uuid));
+        assertEquals(1, cronScheduler.getPriorityQueue().size());
 
         //now try registering a job with the same UUID, should throw an exception and registered jobs should remain unchanged
         assertThrows(RuntimeException.class, () -> cronScheduler.registerCronJob(Duration.ofSeconds(1), Duration.ofSeconds(10),
                 () -> System.out.println("hello after 10 seconds"), uuid));
-        assertEquals(1, cronScheduler.registeredJobs.size());
-        assertEquals(1, cronScheduler.priorityQueue.size());
+        assertEquals(1, cronScheduler.getRegisteredJobs().size());
+        assertEquals(1, cronScheduler.getPriorityQueue().size());
     }
 
     @Test
@@ -44,7 +44,7 @@ public class CronSchedulerTest {
         cronScheduler.registerCronJob(Duration.ofSeconds(1), schedulingFrequency,
                 recordedCronJob, UUID.randomUUID());
         Thread.sleep(11000);
-        assertEquals(maxRuns, recordedCronJob.numRunTimesCounter);
-        assertTrue(recordedCronJob.getTimeIntervals().stream().allMatch(i -> Math.abs(i.minus(schedulingFrequency).toMillis()) < 10));
+        assertEquals(maxRuns, recordedCronJob.getNumRunTimesCounter());
+        assertTrue(recordedCronJob.getTimeIntervals().stream().allMatch(i -> Math.abs(i.minus(schedulingFrequency).toMillis()) < 20));
     }
 }

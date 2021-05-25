@@ -5,10 +5,10 @@ import java.time.Instant;
 import java.util.UUID;
 
 class CronJob implements Comparable<CronJob> {
-    public final Duration expectedRunTime;
-    public final Duration schedulingFrequency;
-    public final CronFunction cronFunction;
-    public final UUID uuid;
+    private final Duration expectedRunTime;
+    private final Duration schedulingFrequency;
+    private final CronFunction cronFunction;
+    private final UUID uuid;
     public Instant nextExecutionTime;
     private int successfulRuns;
     private int failedRuns;
@@ -50,5 +50,21 @@ class CronJob implements Comparable<CronJob> {
 
     public int getFailedRuns() {
         return failedRuns;
+    }
+
+    public Duration getExpectedRunTime() {
+        return expectedRunTime;
+    }
+
+    public Duration getSchedulingFrequency() {
+        return schedulingFrequency;
+    }
+
+    public CronFunction getCronFunction() {
+        return cronFunction;
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 }
